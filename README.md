@@ -43,3 +43,11 @@ data:
     chaos-monkey.gracePeriodInSeconds=30
     chaos-monkey.labelSelector=killable=yes
 ```
+
+## Testing
+
+You can also test the application by running and/or modifying the [ChaosMonkeyApplicationTests.java](https://github.com/justpolidor/chaos-monkey/blob/main/src/test/java/it/justinpolidori/ChaosMonkey/ChaosMonkeyApplicationTests.java). This test class expects a running Kubernetes cluster with the given resources applied: it will retrieve the _chaos-monkey_ ServiceAccount token and use it to authenticate to the cluster; then you can declare your API as the following snippet:
+```java
+private static CoreV1Api api;
+```
+and execute the commands by leveraging the SA capabilities. 
