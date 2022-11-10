@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: dummy-1
+  name: dummy1
+  namespace: workloads
+spec:
+  containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: dummy
+      resources:
+        limits:
+          cpu: 10m
+          memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: dummy-2
+  name: dummy2
+  namespace: workloads
+spec:
+  containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: dummy
+      resources:
+        limits:
+          cpu: 10m
+          memory: 50Mi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: dummy-3
+    killable: "yes"
+  name: dummy3
+  namespace: workloads
+spec:
+  containers:
+    - image: nginx
+      imagePullPolicy: Always
+      name: dummy
+      resources:
+        limits:
+          cpu: 10m
+          memory: 50Mi

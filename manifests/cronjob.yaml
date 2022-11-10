@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  labels:
+    app: chaos-monkey
+  name: chaos-monkey
+  namespace: chaos-monkey
+spec:
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: chaos-monkey
+        spec:
+          serviceAccountName: chaos-monkey
+          containers:
+            - env:
+                - name: SPR_PROFILE
+                  value: dev
+              image: docker.io/jpolidor/chaos-monkey:0.0.1-SNAPSHOT
+              imagePullPolicy: IfNotPresent
+              name: chaos-monkey
+#              resources:
+#                limits:
+#                  cpu: 500m
+#                  memory: 256Mi
+#                requests:
+#                  cpu: 500m
+#                  memory: 256Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop:
+                    - ALL
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                runAsUser: 65534
+              volumeMounts:
+                - mountPath: /config
+                  name: application-config
+                  readOnly: true
+          restartPolicy: OnFailure
+          volumes:
+            - configMap:
+                name: chaos-monkey
+              name: application-config
+  schedule: "* * * * *"

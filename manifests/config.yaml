@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: chaos-monkey
+  namespace: chaos-monkey
+data:
+  application.properties: |-
+    chaos-monkey.timeoutInSeconds=30
+    chaos-monkey.gracePeriodInSeconds=30
+    chaos-monkey.labelSelector=killable=yes
