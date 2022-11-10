@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-@Component
 public class Killer {
 
     Logger logger = LoggerFactory.getLogger(Killer.class);
