@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %white(%d{ISO8601}) %highlight(%-5level) [%green(%thread{15})] %yellow(%logger{15}): %msg%n%throwable{40}
+            </Pattern>
+        </layout>
+    </appender>
+    <appender name="consoleAppenderLogstash" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <fieldNames>
+                <version>[ignore]</version>
+                <levelValue>[ignore]</levelValue>
+            </fieldNames>
+            <throwableConverter class="net.logstash.logback.stacktrace.ShortenedThrowableConverter">
+                <maxDepthPerThrowable>40</maxDepthPerThrowable>
+                <maxLength>4096</maxLength>
+                <shortenedClassNameLength>20</shortenedClassNameLength>
+                <exclude>sun\.reflect\..*\.invoke.*</exclude>
+                <exclude>net\.sf\.cglib\.proxy\.MethodProxy\.invoke</exclude>
+                <rootCauseFirst>true</rootCauseFirst>
+                <inlineHash>true</inlineHash>
+            </throwableConverter>
+        </encoder>
+    </appender>
+
+    <springProfile name="local,dev">
+        <root level="INFO">
+            <appender-ref ref="consoleAppender"/>
+        </root>
+    </springProfile>
+    <springProfile name="test,preprod,prod">
+        <root level="INFO">
+            <appender-ref ref="consoleAppenderLogstash"/>
+        </root>
+        <logger name="jsonLogger" additivity="false" level="DEBUG">
+            <appender-ref ref="consoleAppenderLogstash"/>
+        </logger>
+    </springProfile>
+
+</configuration>
