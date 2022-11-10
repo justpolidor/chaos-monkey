@@ -18,17 +18,12 @@ import java.util.Random;
 @Component
 public class Killer {
 
-    private final CoreV1Api api;
-
     Logger logger = LoggerFactory.getLogger(Killer.class);
 
-    {
-        try {
-            ApiClient client = Config.defaultClient();
-            api = new CoreV1Api(client);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to authenticate to the cluster:"+e);
-        }
+    private final CoreV1Api api;
+
+    public Killer(CoreV1Api api) {
+        this.api = api;
     }
 
     private String selectRandomPod(String namespace, Integer timeoutInSeconds, String labelSelector) throws ApiException {
